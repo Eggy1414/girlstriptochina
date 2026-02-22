@@ -108,3 +108,16 @@
     font-family: 'Noto Serif SC', serif;
   }
 }
+
+/* Chinese cloud decorative divider */
+.chinese-divider {
+  position: relative;
+  text-align: center;
+}
+.chinese-divider::before,
+.chinese-divider::after {
+  content: '☁';
+  opacity: 0.2;
+  font-size: 1rem;
+  margin: 0 0.5rem;
+}

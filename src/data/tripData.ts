@@ -1,4 +1,4 @@
-export type CityKey = "flight" | "chongqing" | "zhangjiajie" | "transit" | "beijing" | "shanghai";
+export type CityKey = "flight" | "chongqing" | "zhangjiajie" | "transit" | "beijing" | "shanghai" | "return";
 
 export interface Activity {
   id: string;
@@ -19,7 +19,7 @@ export interface Expense {
   id: string;
   amount: number;
   currency: "CNY" | "AUD";
-  category: "flights" | "hotels" | "food" | "transport" | "shopping" | "activities" | "other";
+  category: "flights" | "hotels" | "food" | "transport" | "shopping" | "activities" | "shipping" | "other";
   city: CityKey;
   note: string;
   date: string;
@@ -58,6 +58,18 @@ export interface PackingItem {
   checked: boolean;
 }
 
+export interface Accommodation {
+  city: CityKey;
+  name: string;
+  type: "hotel" | "homestay" | "hostel";
+  address: string;
+  dates: string;
+  nights: number;
+  pricePerNight: number;
+  currency: "CNY" | "AUD";
+  notes: string;
+}
+
 export const CITY_CONFIG: Record<CityKey, { name: string; emoji: string; colorClass: string; bgClass: string; dates: string }> = {
   flight: { name: "Flight", emoji: "✈️", colorClass: "text-city-flight", bgClass: "bg-city-flight", dates: "Jun 22-23" },
   chongqing: { name: "Chongqing", emoji: "🏙️", colorClass: "text-city-chongqing", bgClass: "bg-city-chongqing", dates: "Jun 23-26" },
@@ -65,7 +77,15 @@ export const CITY_CONFIG: Record<CityKey, { name: string; emoji: string; colorCl
   transit: { name: "Train to Beijing", emoji: "🚄", colorClass: "text-city-transit", bgClass: "bg-city-transit", dates: "Jun 29-30" },
   beijing: { name: "Beijing", emoji: "🏯", colorClass: "text-city-beijing", bgClass: "bg-city-beijing", dates: "Jun 30 - Jul 2" },
   shanghai: { name: "Shanghai", emoji: "🌃", colorClass: "text-city-shanghai", bgClass: "bg-city-shanghai", dates: "Jul 2-8" },
+  return: { name: "Return to Sydney", emoji: "🏠", colorClass: "text-city-flight", bgClass: "bg-city-flight", dates: "Jul 8-9" },
 };
+
+export const ACCOMMODATIONS: Accommodation[] = [
+  { city: "chongqing", name: "Chongqing Jiefangbei Homestay", type: "homestay", address: "Jiefangbei CBD, Yuzhong District", dates: "Jun 23-26", nights: 3, pricePerNight: 280, currency: "CNY", notes: "Near Hongya Cave & metro, river view room" },
+  { city: "zhangjiajie", name: "Zhangjiajie Forest Park Hotel", type: "hotel", address: "Wulingyuan District, near park entrance", dates: "Jun 26-29", nights: 3, pricePerNight: 350, currency: "CNY", notes: "Walking distance to park entrance, breakfast included" },
+  { city: "beijing", name: "Beijing Hutong Homestay", type: "homestay", address: "Nanluoguxiang, Dongcheng District", dates: "Jun 30 - Jul 2", nights: 3, pricePerNight: 320, currency: "CNY", notes: "Traditional courtyard house (四合院), near subway Line 6" },
+  { city: "shanghai", name: "Shanghai French Concession Apartment", type: "homestay", address: "Jing'an District, near Nanjing West Road", dates: "Jul 2-8", nights: 6, pricePerNight: 400, currency: "CNY", notes: "Spacious 2-bedroom, laundry, great for group stay" },
+];
 
 export const INITIAL_DAYS: DayPlan[] = [
   { date: "2025-06-22", label: "Day 1 — Departure", city: "flight", activities: [{ id: "a1", time: "Evening", title: "Flight Sydney → Chongqing", notes: "Red eye flight — get some sleep!", type: "transport" }] },
@@ -84,7 +104,8 @@ export const INITIAL_DAYS: DayPlan[] = [
   { date: "2025-07-05", label: "Day 14 — Shanghai", city: "shanghai", activities: [{ id: "a18", time: "All Day", title: "Shanghai Disneyland", notes: "Book tickets early!", type: "activity" }] },
   { date: "2025-07-06", label: "Day 15 — Shanghai", city: "shanghai", activities: [{ id: "a19", time: "Afternoon", title: "Tianzifang", notes: "Art & cafes", type: "activity" }] },
   { date: "2025-07-07", label: "Day 16 — Shanghai", city: "shanghai", activities: [{ id: "a20", time: "All Day", title: "Free Day / Shopping", notes: "", type: "shopping" }] },
-  { date: "2025-07-08", label: "Day 17 — Shanghai", city: "shanghai", activities: [{ id: "a21", time: "All Day", title: "Last day — explore", notes: "", type: "activity" }] },
+  { date: "2025-07-08", label: "Day 17 — Shanghai", city: "shanghai", activities: [{ id: "a21", time: "All Day", title: "Last day — explore & pack", notes: "Ship souvenirs if needed", type: "activity" }] },
+  { date: "2025-07-09", label: "Day 18 — Return", city: "return", activities: [{ id: "a22", time: "Morning", title: "Flight Shanghai → Sydney", notes: "Check in luggage + shipping boxes", type: "transport" }] },
 ];
 
 export const ATTRACTIONS: Attraction[] = [
@@ -164,7 +185,7 @@ export const INITIAL_PACKING: PackingItem[] = [
 ];
 
 export const CATEGORY_EMOJI: Record<string, string> = {
-  flights: "✈️", hotels: "🏨", food: "🍜", transport: "🚄", shopping: "🛍️", activities: "🎫", other: "📦",
+  flights: "✈️", hotels: "🏨", food: "🍜", transport: "🚄", shopping: "🛍️", activities: "🎫", shipping: "📦", other: "📦",
   documents: "📄", clothing: "👗", toiletries: "🧴", electronics: "🔌", beauty: "💄", misc: "🎒",
 };
 

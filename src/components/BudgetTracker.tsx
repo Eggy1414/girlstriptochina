@@ -22,28 +22,28 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
   const [note, setNote] = useState("");
   const [budgetGoal] = useState(() => {
     const stored = localStorage.getItem("trip-budget-goal");
-    return stored ? Number(stored) : 5000;
+    return stored ? Number(stored) : 25000;
   });
 
-  const totalAUD = expenses.filter(e => e.currency === "AUD").reduce((s, e) => s + e.amount, 0);
   const totalCNY = expenses.filter(e => e.currency === "CNY").reduce((s, e) => s + e.amount, 0);
-  const estimatedTotal = totalAUD + totalCNY * 0.21;
+  const totalAUD = expenses.filter(e => e.currency === "AUD").reduce((s, e) => s + e.amount, 0);
+  const estimatedTotal = totalCNY + totalAUD * 4.76;
 
   const handleAdd = () => {
     if (!amount) return;
-    addExpense({ id: generateId(), amount: parseFloat(amount), currency: "AUD", category, city, note, date: new Date().toISOString().slice(0, 10) });
+    addExpense({ id: generateId(), amount: parseFloat(amount), currency: "CNY", category, city, note, date: new Date().toISOString().slice(0, 10) });
     setAmount(""); setNote(""); setShowAdd(false);
   };
 
   const byCity = CITIES.map(c => ({
     city: c,
     config: CITY_CONFIG[c],
-    total: expenses.filter(e => e.city === c).reduce((s, e) => s + (e.currency === "AUD" ? e.amount : e.amount * 0.21), 0),
+    total: expenses.filter(e => e.city === c).reduce((s, e) => s + (e.currency === "CNY" ? e.amount : e.amount * 4.76), 0),
   }));
 
   const byCategory = CATEGORIES.map(cat => ({
     category: cat,
-    total: expenses.filter(e => e.category === cat).reduce((s, e) => s + (e.currency === "AUD" ? e.amount : e.amount * 0.21), 0),
+    total: expenses.filter(e => e.category === cat).reduce((s, e) => s + (e.currency === "CNY" ? e.amount : e.amount * 4.76), 0),
   })).filter(c => c.total > 0);
 
   const progressPct = Math.min(100, (estimatedTotal / budgetGoal) * 100);
@@ -55,15 +55,15 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
       {/* Total */}
       <div className="border border-border rounded-lg p-4">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-foreground/60">Total Spent (est. AUD)</span>
-          <span className="font-display font-bold text-2xl">${estimatedTotal.toFixed(0)}</span>
+          <span className="text-sm text-foreground/60">总花费 (估算 ¥)</span>
+          <span className="font-display font-bold text-2xl">¥{estimatedTotal.toFixed(0)}</span>
         </div>
         <div className="w-full bg-accent/30 rounded-full h-2">
           <div className="bg-primary h-2 rounded-full transition-all" style={{ width: `${progressPct}%` }} />
         </div>
         <div className="flex justify-between mt-1">
-          <span className="text-xs text-foreground/40">$0</span>
-          <span className="text-xs text-foreground/40">Goal: ${budgetGoal}</span>
+          <span className="text-xs text-foreground/40">¥0</span>
+          <span className="text-xs text-foreground/40">预算: ¥{budgetGoal}</span>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
           <div key={c} className="border border-border rounded-lg px-3 py-3 text-center">
             <span className="text-xl">{config.emoji}</span>
             <div className="font-display font-bold text-sm mt-1">{config.name}</div>
-            <div className="font-bold">${total.toFixed(0)}</div>
+            <div className="font-bold">¥{total.toFixed(0)}</div>
           </div>
         ))}
       </div>
@@ -86,7 +86,7 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
             {byCategory.map(({ category: cat, total }) => (
               <div key={cat} className="flex items-center justify-between text-sm">
                 <span>{CATEGORY_EMOJI[cat]} {cat}</span>
-                <span className="font-semibold">${total.toFixed(0)}</span>
+                <span className="font-semibold">¥{total.toFixed(0)}</span>
               </div>
             ))}
           </div>
@@ -103,7 +103,7 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
                 <span>{CATEGORY_EMOJI[e.category]}</span>
                 <span className="flex-1 truncate">{e.note || e.category}</span>
                 <span className="text-xs text-foreground/50">{CITY_CONFIG[e.city]?.emoji}</span>
-                <span className="font-semibold">${e.amount} {e.currency}</span>
+                <span className="font-semibold">¥{e.amount} {e.currency}</span>
                 <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100" onClick={() => removeExpense(e.id)}>
                   <Trash2 className="h-3 w-3" />
                 </Button>

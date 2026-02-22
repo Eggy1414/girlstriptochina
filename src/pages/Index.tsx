@@ -1,12 +1,60 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { useTripStore } from "@/hooks/useTripStore";
+import TripDashboard from "@/components/TripDashboard";
+import Timeline from "@/components/Timeline";
+import BudgetTracker from "@/components/BudgetTracker";
+import Attractions from "@/components/Attractions";
+import PhotoGuide from "@/components/PhotoGuide";
+import PackingList from "@/components/PackingList";
+
+const TABS = [
+  { id: "overview", label: "Overview", emoji: "🌏" },
+  { id: "timeline", label: "Timeline", emoji: "📅" },
+  { id: "budget", label: "Budget", emoji: "💰" },
+  { id: "attractions", label: "Attractions", emoji: "🎯" },
+  { id: "photos", label: "Photos", emoji: "📸" },
+  { id: "packing", label: "Packing", emoji: "🎒" },
+] as const;
+
+type TabId = typeof TABS[number]["id"];
 
 const Index = () => {
+  const [activeTab, setActiveTab] = useState<TabId>("overview");
+  const store = useTripStore();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      {/* Tab Navigation */}
+      <nav className="sticky top-0 z-50 bg-card/80 backdrop-blur-md border-b">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="flex gap-1 overflow-x-auto py-2 scrollbar-hide">
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-display font-bold whitespace-nowrap transition-all ${
+                  activeTab === tab.id
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "hover:bg-muted text-muted-foreground"
+                }`}
+              >
+                <span>{tab.emoji}</span>
+                <span className="hidden sm:inline">{tab.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </nav>
+
+      {/* Content */}
+      <main className="max-w-4xl mx-auto px-4 py-6">
+        {activeTab === "overview" && <TripDashboard />}
+        {activeTab === "timeline" && <Timeline days={store.days} updateDay={store.updateDay} />}
+        {activeTab === "budget" && <BudgetTracker expenses={store.expenses} addExpense={store.addExpense} removeExpense={store.removeExpense} />}
+        {activeTab === "attractions" && <Attractions days={store.days} updateDay={store.updateDay} />}
+        {activeTab === "photos" && <PhotoGuide />}
+        {activeTab === "packing" && <PackingList packing={store.packing} togglePacking={store.togglePacking} addPackingItem={store.addPackingItem} removePackingItem={store.removePackingItem} cityNotes={store.cityNotes} updateCityNote={store.updateCityNote} />}
+      </main>
     </div>
   );
 };

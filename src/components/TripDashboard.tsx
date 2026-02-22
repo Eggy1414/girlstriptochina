@@ -49,7 +49,7 @@ function CountdownUnit({ value, label, delay }: { value: number; label: string; 
 }
 
 export default function TripDashboard() {
-  const tripStart = new Date("2025-06-22T00:00:00");
+  const tripStart = new Date("2026-06-22T00:00:00");
   const { days, hours, minutes, seconds } = useCountdown(tripStart);
   const totalDays = INITIAL_DAYS.length;
 

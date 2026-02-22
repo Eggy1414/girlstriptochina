@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { CITY_CONFIG, CityKey, INITIAL_DAYS, ACCOMMODATIONS } from "@/data/tripData";
 import { useMemo, useState, useEffect } from "react";
 
-const ROUTE_CITIES: CityKey[] = ["flight", "chongqing", "zhangjiajie", "transit", "beijing", "shanghai", "return"];
+const ROUTE_CITIES: CityKey[] = ["flight", "chongqing", "trainToZhangjiajie", "zhangjiajie", "transit", "beijing", "flightToShanghai", "shanghai", "return"];
 
 function CloudPattern({ className = "" }: { className?: string }) {
   return (

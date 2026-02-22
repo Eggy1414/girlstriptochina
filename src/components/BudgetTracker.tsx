@@ -11,7 +11,7 @@ interface Props {
   removeExpense: (id: string) => void;
 }
 
-const CATEGORIES = ["flights", "hotels", "food", "transport", "shopping", "activities", "other"] as const;
+const CATEGORIES = ["flights", "hotels", "food", "transport", "shopping", "activities", "shipping", "other"] as const;
 const CITIES: CityKey[] = ["chongqing", "zhangjiajie", "beijing", "shanghai"];
 
 export default function BudgetTracker({ expenses, addExpense, removeExpense }: Props) {
@@ -50,7 +50,7 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
 
   return (
     <div className="space-y-6">
-      <h2 className="font-display font-bold text-2xl">Budget Tracker</h2>
+      <h2 className="font-display font-bold text-2xl flex items-center gap-2">🏮 Budget Tracker</h2>
 
       {/* Total */}
       <div className="border border-border rounded-lg p-4">

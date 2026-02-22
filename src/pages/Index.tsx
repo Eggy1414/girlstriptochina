@@ -27,7 +27,8 @@ const Index = () => {
       {/* Tab Navigation */}
       <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur-sm border-b border-border">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="flex gap-1 overflow-x-auto py-2 scrollbar-hide">
+          <div className="flex items-center gap-1 overflow-x-auto py-2 scrollbar-hide">
+            <span className="text-lg mr-1 hidden sm:inline">🏮</span>
             {TABS.map(tab => (
               <button
                 key={tab.id}
@@ -42,6 +43,7 @@ const Index = () => {
                 <span className="hidden sm:inline">{tab.label}</span>
               </button>
             ))}
+            <span className="text-lg ml-1 hidden sm:inline">🏮</span>
           </div>
         </div>
       </nav>

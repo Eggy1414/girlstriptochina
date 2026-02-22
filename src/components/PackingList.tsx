@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { PackingItem, CATEGORY_EMOJI, CITY_CONFIG, CityKey, generateId } from "@/data/tripData";
-import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2, Package } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 interface Props {
   packing: PackingItem[];
@@ -42,41 +41,34 @@ export default function PackingList({ packing, togglePacking, addPackingItem, re
 
   return (
     <div className="space-y-6">
-      <h2 className="font-display font-bold text-2xl">🎒 Packing & Notes</h2>
+      <h2 className="font-display font-bold text-2xl">Packing & Notes</h2>
 
       <div className="flex gap-2">
         <button
           onClick={() => setTab("packing")}
-          className={`px-4 py-2 rounded-full font-display font-bold text-sm transition-colors ${tab === "packing" ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"}`}
+          className={`px-4 py-2 rounded-full font-display font-bold text-sm transition-colors ${tab === "packing" ? "bg-primary text-primary-foreground" : "border border-border hover:bg-accent/30"}`}
         >
-          📦 Packing List
+          Packing List
         </button>
         <button
           onClick={() => setTab("notes")}
-          className={`px-4 py-2 rounded-full font-display font-bold text-sm transition-colors ${tab === "notes" ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"}`}
+          className={`px-4 py-2 rounded-full font-display font-bold text-sm transition-colors ${tab === "notes" ? "bg-primary text-primary-foreground" : "border border-border hover:bg-accent/30"}`}
         >
-          📝 City Notes
+          City Notes
         </button>
       </div>
 
       {tab === "packing" && (
         <>
-          <Card>
-            <CardContent className="pt-4 pb-3">
-              <div className="flex items-center gap-3">
-                <Package className="h-5 w-5 text-primary" />
-                <div className="flex-1">
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="font-semibold">{checkedCount}/{packing.length} packed</span>
-                    <span className="text-muted-foreground">{progress.toFixed(0)}%</span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full transition-all" style={{ width: `${progress}%` }} />
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="border border-border rounded-lg p-4">
+            <div className="flex justify-between text-sm mb-2">
+              <span className="font-semibold">{checkedCount}/{packing.length} packed</span>
+              <span className="text-foreground/50">{progress.toFixed(0)}%</span>
+            </div>
+            <div className="w-full bg-accent/30 rounded-full h-2">
+              <div className="bg-primary h-2 rounded-full transition-all" style={{ width: `${progress}%` }} />
+            </div>
+          </div>
 
           {grouped.map(({ category, items }) => (
             <div key={category}>
@@ -87,8 +79,8 @@ export default function PackingList({ packing, togglePacking, addPackingItem, re
                 {items.map(item => (
                   <div key={item.id} className="flex items-center gap-2 group py-1">
                     <Checkbox checked={item.checked} onCheckedChange={() => togglePacking(item.id)} />
-                    <span className={`text-sm flex-1 ${item.checked ? "line-through text-muted-foreground" : ""}`}>{item.item}</span>
-                    <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100 text-destructive" onClick={() => removePackingItem(item.id)}>
+                    <span className={`text-sm flex-1 ${item.checked ? "line-through text-foreground/40" : ""}`}>{item.item}</span>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100" onClick={() => removePackingItem(item.id)}>
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
@@ -98,11 +90,11 @@ export default function PackingList({ packing, togglePacking, addPackingItem, re
           ))}
 
           {showAdd ? (
-            <div className="flex flex-col gap-2 bg-muted/20 rounded-lg p-3">
+            <div className="flex flex-col gap-2 border border-border rounded-lg p-3">
               <Input placeholder="Item name" value={newItem} onChange={e => setNewItem(e.target.value)} className="h-8 text-sm" />
               <div className="flex gap-1 flex-wrap">
                 {PACK_CATEGORIES.map(c => (
-                  <button key={c} onClick={() => setNewCat(c)} className={`text-xs px-2 py-1 rounded-full border transition-colors ${newCat === c ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}>
+                  <button key={c} onClick={() => setNewCat(c)} className={`text-xs px-2 py-1 rounded-full border border-border transition-colors ${newCat === c ? "bg-primary text-primary-foreground" : "hover:bg-accent/30"}`}>
                     {CATEGORY_EMOJI[c]} {c}
                   </button>
                 ))}
@@ -125,19 +117,17 @@ export default function PackingList({ packing, togglePacking, addPackingItem, re
           {NOTE_CITIES.map(c => {
             const config = CITY_CONFIG[c];
             return (
-              <Card key={c} className="border-2">
-                <CardContent className="pt-4 pb-3">
-                  <h3 className="font-display font-bold text-sm flex items-center gap-2 mb-2">
-                    <span className="text-lg">{config.emoji}</span> {config.name} Notes
-                  </h3>
-                  <Textarea
-                    placeholder={`Restaurant tips, reminders, etc for ${config.name}...`}
-                    value={cityNotes[c] || ""}
-                    onChange={e => updateCityNote(c, e.target.value)}
-                    className="min-h-[80px] text-sm"
-                  />
-                </CardContent>
-              </Card>
+              <div key={c} className="border border-border rounded-lg p-4">
+                <h3 className="font-display font-bold text-sm flex items-center gap-2 mb-2">
+                  <span className="text-lg">{config.emoji}</span> {config.name} Notes
+                </h3>
+                <Textarea
+                  placeholder={`Restaurant tips, reminders, etc for ${config.name}...`}
+                  value={cityNotes[c] || ""}
+                  onChange={e => updateCityNote(c, e.target.value)}
+                  className="min-h-[80px] text-sm"
+                />
+              </div>
             );
           })}
         </div>

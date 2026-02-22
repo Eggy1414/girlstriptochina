@@ -1,82 +1,57 @@
 
 
-# Minimalist Red Background with White Text
+# Add Detailed Chongqing 3-Day Itinerary
 
-Redesign the entire app to have a bold red background with white text in a clean, minimalist style.
+Replace the current placeholder Chongqing activities with the detailed 3-day essential map provided.
 
-## Changes Overview
+## Changes
 
-### 1. CSS Variables (src/index.css)
-- Set `--background` to a rich Chinese red (approximately hsl(0, 75%, 40%))
-- Set `--foreground` to white
-- Set `--card` to a slightly lighter/darker red for subtle contrast (semi-transparent white overlay)
-- Set `--card-foreground` to white
-- Set `--muted` to a darker red tone
-- Set `--muted-foreground` to a soft white/cream (rgba white with some opacity)
-- Set `--border` to a subtle red-tinted border (lighter red)
-- Set `--primary` to white (inverted — buttons become white on red)
-- Set `--primary-foreground` to red (text on white buttons)
-- Remove or simplify city accent colors to keep them minimal (white outlines instead of colorful backgrounds)
+### 1. Update `src/data/tripData.ts` — INITIAL_DAYS (Chongqing section)
 
-### 2. Component Style Updates
+Replace the 3 Chongqing days (Jun 23-25) with the full itinerary:
 
-**Index.tsx (Nav bar)**
-- Nav becomes transparent/red with white text, remove backdrop-blur card background
-- Active tab: white background with red text; Inactive: white text with hover
+**Day 2 (Jun 23) — "The Cyberpunk Skyline"**
+- Arrive & check in (Morning, rest)
+- Jiefangbei CBD & Kuixing Mansion (Afternoon, activity) — "Times Square of Chongqing, witness the 1F vs 22F magic"
+- Hao You Lai Suan La Fen at Bayi Lu (Afternoon, food) — "Famous hot & sour rice noodles"
+- Daijia Lane Cliffside Walk (Late Afternoon, activity) — "Elevated path overlooking Jialing River, great coffee spot"
+- Hongya Cave night view from Qiansimen Bridge (Evening, photo) — "Best panoramic shot of the Spirited Away building"
+- Tian Bang Bang Hotpot (Evening, food) — "Local residential-style hotpot"
 
-**TripDashboard.tsx**
-- Remove shadow-heavy cards, use thin white borders instead
-- Countdown and stats use white text on red
-- Route cities: use white-bordered cards instead of colorful city backgrounds
+**Day 3 (Jun 24) — "River Romance & Giant Pandas"**
+- Chongqing Zoo Panda House (Morning, activity) — "See Yu Ke & Yu Ai pandas, arrive before 9AM for feeding"
+- Testbed 2 Art Park (Afternoon, activity) — "I Belonged to You filming location"
+- Liziba Monorail (Afternoon, photo) — "Watch the train pass through a building!"
+- Longmenhao Old Street & Xiaohao Lane (Sunset, activity) — "Renovated south bank historical area, perfect sunset walk"
+- Yangtze River Cable Car (Evening, activity) — "Take from South Bank (Shangxin Street) to skip queues"
 
-**Timeline.tsx**
-- City group headers: white text with white border bottom instead of colored backgrounds
-- Day items: minimal white borders, white text
-- Remove heavy card backgrounds
+**Day 4 (Jun 25) — "Old World Charm & Modern Vibes"**
+- Shancheng Alley / Mountain City Lane (Morning, activity) — "Authentic stone paths, Old Chongqing vibes"
+- Ciqikou Ancient Town (Midday, shopping) — "Souvenirs & Chen Mahua fried dough twists"
+- Guanyinqiao Pedestrian Street (Late Afternoon, activity) — "The real modern Chongqing, people-watching & trendy dinner"
+- Travel to Zhangjiajie (Evening, transport)
 
-**BudgetTracker.tsx**
-- Cards become minimal with white borders
-- Progress bar: white track on red
-- Category/city filter buttons: white outline style
+### 2. Update `src/data/tripData.ts` — ATTRACTIONS array
 
-**Attractions.tsx**
-- Cards with white borders, no shadows
-- Badges: white outline
-- Filter buttons: white outline active state
+Add new Chongqing attractions that aren't already listed:
+- Kuixing Mansion — "1F vs 22F gravity-defying bridge, cyberpunk vibes"
+- Daijia Lane Cliffside Walk — "Quiet elevated path with Jialing River views"
+- Chongqing Zoo Panda House — "Home of celebrity pandas Yu Ke & Yu Ai"
+- Testbed 2 Art Park — "Film location turned art district"
+- Liziba Monorail Station — "Train passes through a residential building"
+- Shancheng Alley — "Mountain City Lane, authentic Old Chongqing stone paths"
+- Guanyinqiao Pedestrian Street — "Modern Chongqing shopping & dining"
 
-**PhotoGuide.tsx**
-- Same minimal white-bordered cards
-- Tab buttons: white fill when active
+### 3. Update `src/data/tripData.ts` — PHOTO_SPOTS array
 
-**PackingList.tsx**
-- Checkbox styling adjusted for white on red
-- Cards with white borders
-- Minimal styling throughout
+Add new Chongqing photo spots:
+- Kuixing Mansion Bridge — "Gravity-defying bridge between buildings"
+- Liziba Monorail Through Building — "Train emerging from apartment block"
+- Yangtze River Cable Car at Night — "Crossing the river with city lights"
+- Shancheng Alley Stone Steps — "Atmospheric old lane with stone paths"
 
-### 3. Shared UI Components
-- **Card** (card.tsx): The CSS variable change will handle this automatically
-- **Button**: Primary variant will become white-on-red via CSS variables
-- **Progress**: Track and fill colors via CSS variables
-- **Badge**: Will inherit the new color scheme
-
-### Design Principles
-- No shadows (or very subtle ones)
-- Thin white borders for separation
-- Generous whitespace
-- Clean typography with high contrast (white on red)
-- Reduced use of emoji (keep a few key ones)
-- Flat, borderless design where possible
-
-## Technical Details
-
-**Files to modify:**
-1. `src/index.css` — New color variables for red bg + white text
-2. `src/data/tripData.ts` — Update city bgClass to use minimal white-bordered style
-3. `src/pages/Index.tsx` — Simplify nav styling
-4. `src/components/TripDashboard.tsx` — Minimal card styles, white borders
-5. `src/components/Timeline.tsx` — White-bordered city headers, minimal activity rows
-6. `src/components/BudgetTracker.tsx` — White-bordered cards, white progress bar
-7. `src/components/Attractions.tsx` — Minimal cards with white borders
-8. `src/components/PhotoGuide.tsx` — Minimal cards
-9. `src/components/PackingList.tsx` — Minimal styling
-
+### Technical Notes
+- All text in English (no Chinese characters), using pinyin for place names where needed
+- Activity IDs will be regenerated to avoid conflicts (a2-a6 range will be expanded)
+- Subsequent day activity IDs (a7+) will be renumbered to accommodate the new entries
+- Only `src/data/tripData.ts` needs modification; Timeline component renders dynamically from data

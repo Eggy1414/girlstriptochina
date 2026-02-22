@@ -1,4 +1,4 @@
-export type CityKey = "flight" | "chongqing" | "zhangjiajie" | "transit" | "beijing" | "shanghai" | "return";
+export type CityKey = "flight" | "chongqing" | "trainToZhangjiajie" | "zhangjiajie" | "transit" | "beijing" | "flightToShanghai" | "shanghai" | "return";
 
 export interface Activity {
   id: string;
@@ -73,9 +73,11 @@ export interface Accommodation {
 export const CITY_CONFIG: Record<CityKey, { name: string; emoji: string; colorClass: string; bgClass: string; dates: string }> = {
   flight: { name: "Flight", emoji: "✈️", colorClass: "text-city-flight", bgClass: "bg-city-flight", dates: "Jun 22-23" },
   chongqing: { name: "Chongqing", emoji: "🏙️", colorClass: "text-city-chongqing", bgClass: "bg-city-chongqing", dates: "Jun 23-26" },
+  trainToZhangjiajie: { name: "Train to Zhangjiajie", emoji: "🚄", colorClass: "text-city-transit", bgClass: "bg-city-transit", dates: "Jun 26" },
   zhangjiajie: { name: "Zhangjiajie", emoji: "🏔️", colorClass: "text-city-zhangjiajie", bgClass: "bg-city-zhangjiajie", dates: "Jun 26-29" },
   transit: { name: "Train to Beijing", emoji: "🚄", colorClass: "text-city-transit", bgClass: "bg-city-transit", dates: "Jun 29-30" },
   beijing: { name: "Beijing", emoji: "🏯", colorClass: "text-city-beijing", bgClass: "bg-city-beijing", dates: "Jun 30 - Jul 2" },
+  flightToShanghai: { name: "Flight to Shanghai", emoji: "✈️", colorClass: "text-city-flight", bgClass: "bg-city-flight", dates: "Jul 2" },
   shanghai: { name: "Shanghai", emoji: "🌃", colorClass: "text-city-shanghai", bgClass: "bg-city-shanghai", dates: "Jul 2-8" },
   return: { name: "Return to Sydney", emoji: "🏠", colorClass: "text-city-flight", bgClass: "bg-city-flight", dates: "Jul 8-9" },
 };

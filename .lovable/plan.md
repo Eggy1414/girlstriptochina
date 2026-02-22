@@ -1,61 +1,82 @@
-# 🌏 Travel Planner — Sydney to China Trip
 
-An interactive, colorful travel planning app for 4 girls' trip across China, pre-filled with your itinerary and packed with useful planning tools.
 
----
+# Minimalist Red Background with White Text
 
-## 1. Trip Overview Dashboard
+Redesign the entire app to have a bold red background with white text in a clean, minimalist style.
 
-- A vibrant landing page showing the full trip route: **Sydney → Chongqing → Zhangjiajie → Beijing → Shanghai**
-- Visual route map/illustration connecting each city
-- Trip countdown timer
-- Quick stats: total days, cities, budget summary
+## Changes Overview
 
-## 2. Day-by-Day Timeline
+### 1. CSS Variables (src/index.css)
+- Set `--background` to a rich Chinese red (approximately hsl(0, 75%, 40%))
+- Set `--foreground` to white
+- Set `--card` to a slightly lighter/darker red for subtle contrast (semi-transparent white overlay)
+- Set `--card-foreground` to white
+- Set `--muted` to a darker red tone
+- Set `--muted-foreground` to a soft white/cream (rgba white with some opacity)
+- Set `--border` to a subtle red-tinted border (lighter red)
+- Set `--primary` to white (inverted — buttons become white on red)
+- Set `--primary-foreground` to red (text on white buttons)
+- Remove or simplify city accent colors to keep them minimal (white outlines instead of colorful backgrounds)
 
-- Each city as a colorful section with its own theme/accent color
-- Pre-filled structure:
-  - **Jun 22-23**: ✈️ Flight (Sydney → Chongqing)
-  - **Jun 23-26**: 🏙️ Chongqing (2 full days, 3 nights)
-  - **Jun 26-29**: 🏔️ Zhangjiajie (3 full days, 3 nights)
-  - **Jun 29-30**: 🚄 Train to Beijing (10hr transit)
-  - **Jun 30 - Jul 2**: 🏯 Beijing (2.5 full days, 3 nights)
-  - **Jul 2-8**: 🌃 Shanghai (6 full days)
-- Each day is expandable with time slots where you can **add, edit, reorder, and delete activities**
-- Add notes, links, and details to each activity
+### 2. Component Style Updates
 
-## 3. Budget Tracker
+**Index.tsx (Nav bar)**
+- Nav becomes transparent/red with white text, remove backdrop-blur card background
+- Active tab: white background with red text; Inactive: white text with hover
 
-- Track expenses by category: flights, hotels, food, transport, shopping, activities
-- Per-city budget breakdown
-- Running total with a fun visual progress bar
-- Add expenses with amount, category, and notes
+**TripDashboard.tsx**
+- Remove shadow-heavy cards, use thin white borders instead
+- Countdown and stats use white text on red
+- Route cities: use white-bordered cards instead of colorful city backgrounds
 
-## 4. Attraction Suggestions
+**Timeline.tsx**
+- City group headers: white text with white border bottom instead of colored backgrounds
+- Day items: minimal white borders, white text
+- Remove heavy card backgrounds
 
-- Curated list of popular attractions for each city (pre-filled)
-- Chongqing: Hongya Cave, Ciqikou Old Town, hot pot streets
-- Zhangjiajie: Glass Bridge, Avatar Mountains, Tianmen Mountain
-- Beijing: Great Wall, Forbidden City, Temple of Heaven, Hutongs
-- Shanghai: The Bund, Yu Garden, Nanjing Road, Disneyland, Tianzifang
-- One-click to add any attraction to your day planner
+**BudgetTracker.tsx**
+- Cards become minimal with white borders
+- Progress bar: white track on red
+- Category/city filter buttons: white outline style
 
-## 5. 📸 Photo Guide
+**Attractions.tsx**
+- Cards with white borders, no shadows
+- Badges: white outline
+- Filter buttons: white outline active state
 
-- **Photo spots** for each city — best locations for group photos, scenic shots, and Instagram-worthy spots
-- **Pose ideas** — a fun gallery of group pose suggestions for 4 girls (matching poses, creative formations, candid ideas)
-- Tag spots as "must-shoot" and link them to specific days in your itinerary
+**PhotoGuide.tsx**
+- Same minimal white-bordered cards
+- Tab buttons: white fill when active
 
-## 6. Packing List & Notes
+**PackingList.tsx**
+- Checkbox styling adjusted for white on red
+- Cards with white borders
+- Minimal styling throughout
 
-- Shared packing checklist with pre-suggested items (travel docs, chargers, beauty essentials, etc.)
-- Custom notes section for each city (restaurant lists, tips, reminders)
-- Check off items as you pack
+### 3. Shared UI Components
+- **Card** (card.tsx): The CSS variable change will handle this automatically
+- **Button**: Primary variant will become white-on-red via CSS variables
+- **Progress**: Track and fill colors via CSS variables
+- **Badge**: Will inherit the new color scheme
 
-## Design Style
+### Design Principles
+- No shadows (or very subtle ones)
+- Thin white borders for separation
+- Generous whitespace
+- Clean typography with high contrast (white on red)
+- Reduced use of emoji (keep a few key ones)
+- Flat, borderless design where possible
 
-- **Colorful & fun** — each city gets a unique accent color
-- Playful icons and emoji throughout
-- Card-based layout with smooth animations
-- Mobile-friendly for use on the go
-- All data stored locally in the browser (no login needed)
+## Technical Details
+
+**Files to modify:**
+1. `src/index.css` — New color variables for red bg + white text
+2. `src/data/tripData.ts` — Update city bgClass to use minimal white-bordered style
+3. `src/pages/Index.tsx` — Simplify nav styling
+4. `src/components/TripDashboard.tsx` — Minimal card styles, white borders
+5. `src/components/Timeline.tsx` — White-bordered city headers, minimal activity rows
+6. `src/components/BudgetTracker.tsx` — White-bordered cards, white progress bar
+7. `src/components/Attractions.tsx` — Minimal cards with white borders
+8. `src/components/PhotoGuide.tsx` — Minimal cards
+9. `src/components/PackingList.tsx` — Minimal styling
+

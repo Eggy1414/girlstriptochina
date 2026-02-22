@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Expense, CityKey, CITY_CONFIG, CATEGORY_EMOJI, generateId } from "@/data/tripData";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Calculator, Users } from "lucide-react";
 
 interface Props {
   expenses: Expense[];
@@ -20,10 +20,10 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
   const [category, setCategory] = useState<Expense["category"]>("food");
   const [city, setCity] = useState<CityKey>("chongqing");
   const [note, setNote] = useState("");
-  const [budgetGoal] = useState(() => {
-    const stored = localStorage.getItem("trip-budget-goal");
-    return stored ? Number(stored) : 25000;
-  });
+  const [showSplit, setShowSplit] = useState(false);
+  const [splitPeople, setSplitPeople] = useState(2);
+  const [splitAmount, setSplitAmount] = useState("");
+  const [splitPaidBy, setSplitPaidBy] = useState("");
 
   const totalCNY = expenses.filter(e => e.currency === "CNY").reduce((s, e) => s + e.amount, 0);
   const totalAUD = expenses.filter(e => e.currency === "AUD").reduce((s, e) => s + e.amount, 0);
@@ -46,24 +46,21 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
     total: expenses.filter(e => e.category === cat).reduce((s, e) => s + (e.currency === "CNY" ? e.amount : e.amount * 4.76), 0),
   })).filter(c => c.total > 0);
 
-  const progressPct = Math.min(100, (estimatedTotal / budgetGoal) * 100);
+  const splitPerPerson = splitAmount ? parseFloat(splitAmount) / splitPeople : 0;
 
   return (
     <div className="space-y-6">
-      <h2 className="font-display font-bold text-2xl flex items-center gap-2">🏮 Budget Tracker</h2>
+      <h2 className="font-display font-bold text-2xl flex items-center gap-2">💰 Expense Tracker</h2>
 
       {/* Total */}
       <div className="border border-border rounded-lg p-4">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-foreground/60">总花费 (估算 ¥)</span>
+          <span className="text-sm text-foreground/60">Total Spent (est. ¥)</span>
           <span className="font-display font-bold text-2xl">¥{estimatedTotal.toFixed(0)}</span>
         </div>
-        <div className="w-full bg-accent/30 rounded-full h-2">
-          <div className="bg-primary h-2 rounded-full transition-all" style={{ width: `${progressPct}%` }} />
-        </div>
-        <div className="flex justify-between mt-1">
-          <span className="text-xs text-foreground/40">¥0</span>
-          <span className="text-xs text-foreground/40">预算: ¥{budgetGoal}</span>
+        <div className="text-xs text-foreground/40 flex gap-3">
+          <span>CNY: ¥{totalCNY.toFixed(0)}</span>
+          {totalAUD > 0 && <span>AUD: ${totalAUD.toFixed(0)}</span>}
         </div>
       </div>
 
@@ -93,6 +90,82 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
         </div>
       )}
 
+      {/* Split Calculator */}
+      <div className="border border-border rounded-lg p-4">
+        <button
+          onClick={() => setShowSplit(!showSplit)}
+          className="flex items-center gap-2 w-full font-display font-bold text-sm"
+        >
+          <Calculator className="h-4 w-4" />
+          AA Split Calculator
+          <span className="ml-auto text-foreground/40 text-xs">{showSplit ? "▲" : "▼"}</span>
+        </button>
+        {showSplit && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            className="mt-3 space-y-3"
+          >
+            <div className="flex gap-2 items-center">
+              <Input
+                type="number"
+                placeholder="Total amount (¥)"
+                value={splitAmount}
+                onChange={e => setSplitAmount(e.target.value)}
+                className="flex-1 h-9"
+              />
+              <div className="flex items-center gap-1">
+                <Users className="h-4 w-4 text-foreground/50" />
+                <button
+                  onClick={() => setSplitPeople(Math.max(2, splitPeople - 1))}
+                  className="h-7 w-7 rounded border border-border text-sm hover:bg-accent/30"
+                >-</button>
+                <span className="w-6 text-center font-bold text-sm">{splitPeople}</span>
+                <button
+                  onClick={() => setSplitPeople(splitPeople + 1)}
+                  className="h-7 w-7 rounded border border-border text-sm hover:bg-accent/30"
+                >+</button>
+              </div>
+            </div>
+            <Input
+              placeholder="Paid by (optional)"
+              value={splitPaidBy}
+              onChange={e => setSplitPaidBy(e.target.value)}
+              className="h-9"
+            />
+            {splitAmount && (
+              <div className="bg-accent/20 rounded-lg p-3 space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Total</span>
+                  <span className="font-bold">¥{parseFloat(splitAmount).toFixed(0)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Split {splitPeople} ways</span>
+                  <span className="font-display font-bold text-lg">¥{splitPerPerson.toFixed(2)}</span>
+                </div>
+                {splitPaidBy && (
+                  <div className="text-xs text-foreground/50 mt-1">
+                    💡 Everyone owes {splitPaidBy}: ¥{splitPerPerson.toFixed(2)} each
+                  </div>
+                )}
+              </div>
+            )}
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                if (!splitAmount) return;
+                const totalExpense = parseFloat(splitAmount);
+                setSplitAmount(estimatedTotal.toFixed(0));
+              }}
+              className="text-xs"
+            >
+              Use total expenses (¥{estimatedTotal.toFixed(0)})
+            </Button>
+          </motion.div>
+        )}
+      </div>
+
       {/* Recent Expenses */}
       {expenses.length > 0 && (
         <div className="border border-border rounded-lg p-4">
@@ -117,7 +190,7 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
       {showAdd ? (
         <div className="border border-border rounded-lg p-4 space-y-3">
           <div className="flex gap-2">
-            <Input type="number" placeholder="Amount" value={amount} onChange={e => setAmount(e.target.value)} className="w-28 h-9" />
+            <Input type="number" placeholder="Amount (¥)" value={amount} onChange={e => setAmount(e.target.value)} className="w-28 h-9" />
             <Input placeholder="Note" value={note} onChange={e => setNote(e.target.value)} className="flex-1 h-9" />
           </div>
           <div className="flex gap-1 flex-wrap">

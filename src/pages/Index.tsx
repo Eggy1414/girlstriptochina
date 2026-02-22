@@ -25,7 +25,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Tab Navigation */}
-      <nav className="sticky top-0 z-50 bg-card/80 backdrop-blur-md border-b">
+      <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur-sm border-b border-border">
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex gap-1 overflow-x-auto py-2 scrollbar-hide">
             {TABS.map(tab => (
@@ -34,8 +34,8 @@ const Index = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-display font-bold whitespace-nowrap transition-all ${
                   activeTab === tab.id
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "hover:bg-muted text-muted-foreground"
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-accent text-foreground/70"
                 }`}
               >
                 <span>{tab.emoji}</span>

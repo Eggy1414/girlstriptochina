@@ -10,7 +10,7 @@ import PackingList from "@/components/PackingList";
 const TABS = [
   { id: "overview", label: "Overview", emoji: "🌏" },
   { id: "timeline", label: "Timeline", emoji: "📅" },
-  { id: "budget", label: "Budget", emoji: "💰" },
+  { id: "budget", label: "Expenses", emoji: "💰" },
   { id: "attractions", label: "Attractions", emoji: "🎯" },
   { id: "photos", label: "Photos", emoji: "📸" },
   { id: "packing", label: "Packing", emoji: "🎒" },

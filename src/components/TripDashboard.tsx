@@ -158,19 +158,27 @@ export default function TripDashboard() {
                     {acc.notes && <div className="text-xs text-foreground/60 mt-1">💡 {acc.notes}</div>}
                   </div>
                   <div className="text-right whitespace-nowrap">
-                    <div className="font-display font-bold text-sm">¥{acc.pricePerNight}/night</div>
-                    <div className="text-[10px] text-foreground/50">{acc.nights} nights = ¥{acc.pricePerNight * acc.nights}</div>
+                    {acc.pricePerNight > 0 ? (
+                      <>
+                        <div className="font-display font-bold text-sm">¥{acc.pricePerNight}/night</div>
+                        <div className="text-[10px] text-foreground/50">{acc.nights} nights = ¥{acc.pricePerNight * acc.nights}</div>
+                      </>
+                    ) : (
+                      <div className="font-display font-bold text-sm text-foreground/40">待定</div>
+                    )}
                   </div>
                 </motion.div>
               );
             })}
           </div>
-          <div className="mt-4 pt-3 border-t border-border flex justify-between items-center text-sm">
-            <span className="text-foreground/60">Total Accommodation</span>
-            <span className="font-display font-bold">
-              ¥{ACCOMMODATIONS.reduce((sum, a) => sum + a.pricePerNight * a.nights, 0).toLocaleString()}
-            </span>
-          </div>
+          {ACCOMMODATIONS.some(a => a.pricePerNight > 0) && (
+            <div className="mt-4 pt-3 border-t border-border flex justify-between items-center text-sm">
+              <span className="text-foreground/60">Total Accommodation</span>
+              <span className="font-display font-bold">
+                ¥{ACCOMMODATIONS.reduce((sum, a) => sum + a.pricePerNight * a.nights, 0).toLocaleString()}
+              </span>
+            </div>
+          )}
         </div>
       </motion.div>
 

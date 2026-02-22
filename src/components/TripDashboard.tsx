@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
 import { CITY_CONFIG, CityKey, INITIAL_DAYS, ACCOMMODATIONS } from "@/data/tripData";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 const ROUTE_CITIES: CityKey[] = ["flight", "chongqing", "zhangjiajie", "transit", "beijing", "shanghai", "return"];
 
-// SVG cloud pattern for Chinese decorative element
 function CloudPattern({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 120 40" className={className} fill="currentColor" opacity="0.15">
@@ -13,12 +12,45 @@ function CloudPattern({ className = "" }: { className?: string }) {
   );
 }
 
-const ACCOM_TYPE_LABEL = { hotel: "🏨 酒店", homestay: "🏠 民宿", hostel: "🏘️ 青旅" };
+const ACCOM_TYPE_LABEL = { hotel: "Hotel", homestay: "Homestay", hostel: "Hostel" };
+const ACCOM_TYPE_ICON = { hotel: "🏨", homestay: "🏠", hostel: "🏘️" };
+
+function useCountdown(targetDate: Date) {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const diff = Math.max(0, targetDate.getTime() - now.getTime());
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  return { days, hours, minutes, seconds };
+}
+
+function CountdownUnit({ value, label, delay }: { value: number; label: string; delay: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay }}
+      className="flex flex-col items-center"
+    >
+      <div className="border border-border rounded-xl w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
+        <span className="font-display font-black text-3xl md:text-4xl tabular-nums">
+          {String(value).padStart(2, "0")}
+        </span>
+      </div>
+      <span className="text-[10px] md:text-xs text-foreground/50 mt-1.5 uppercase tracking-widest">{label}</span>
+    </motion.div>
+  );
+}
 
 export default function TripDashboard() {
   const tripStart = new Date("2025-06-22T00:00:00");
-  const now = new Date();
-  const daysUntil = Math.max(0, Math.ceil((tripStart.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+  const { days, hours, minutes, seconds } = useCountdown(tripStart);
   const totalDays = INITIAL_DAYS.length;
 
   const cityDayCounts = useMemo(() => {
@@ -29,7 +61,6 @@ export default function TripDashboard() {
 
   return (
     <div className="space-y-8 relative">
-      {/* Decorative clouds */}
       <CloudPattern className="absolute top-0 right-0 w-32 text-foreground pointer-events-none" />
       <CloudPattern className="absolute top-40 left-0 w-24 text-foreground pointer-events-none rotate-6" />
 
@@ -37,15 +68,21 @@ export default function TripDashboard() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center py-10 relative">
         <div className="text-3xl mb-2">🏮</div>
         <h1 className="text-4xl md:text-5xl font-display font-black mb-2">Girls Trip to China</h1>
-        <p className="text-sm text-foreground/60 mb-8 tracking-wide">Sydney → 重庆 → 张家界 → 北京 → 上海 → Sydney</p>
+        <p className="text-sm text-foreground/60 mb-8 tracking-wide">
+          Sydney → Chongqing → Zhangjiajie → Beijing → Shanghai → Sydney
+        </p>
         
-        <div className="inline-flex items-center gap-3 border border-border rounded-xl px-8 py-5">
-          <div className="text-center">
-            <div className="text-5xl font-display font-black">{daysUntil}</div>
-            <div className="text-sm text-foreground/60">days to go</div>
-          </div>
+        <div className="flex items-center justify-center gap-3 md:gap-4">
+          <CountdownUnit value={days} label="days" delay={0.1} />
+          <span className="text-foreground/30 text-2xl font-light mt-[-20px]">:</span>
+          <CountdownUnit value={hours} label="hrs" delay={0.2} />
+          <span className="text-foreground/30 text-2xl font-light mt-[-20px]">:</span>
+          <CountdownUnit value={minutes} label="min" delay={0.3} />
+          <span className="text-foreground/30 text-2xl font-light mt-[-20px]">:</span>
+          <CountdownUnit value={seconds} label="sec" delay={0.4} />
         </div>
-        <div className="flex justify-center gap-2 mt-4 text-2xl">
+
+        <div className="flex justify-center gap-2 mt-6 text-2xl">
           <span>🏮</span><span>☁️</span><span>🏮</span>
         </div>
       </motion.div>
@@ -131,14 +168,14 @@ export default function TripDashboard() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-semibold text-sm">{acc.name}</span>
                       <span className="text-[10px] border border-border rounded-full px-2 py-0.5">
-                        {ACCOM_TYPE_LABEL[acc.type]}
+                        {ACCOM_TYPE_ICON[acc.type]} {ACCOM_TYPE_LABEL[acc.type]}
                       </span>
                     </div>
                     <div className="text-xs text-foreground/50 mt-0.5">📍 {acc.address}</div>
                     {acc.notes && <div className="text-xs text-foreground/60 mt-1">💡 {acc.notes}</div>}
                   </div>
                   <div className="text-right whitespace-nowrap">
-                    <div className="font-display font-bold text-sm">¥{acc.pricePerNight}/晚</div>
+                    <div className="font-display font-bold text-sm">¥{acc.pricePerNight}/night</div>
                     <div className="text-[10px] text-foreground/50">{acc.nights} nights = ¥{acc.pricePerNight * acc.nights}</div>
                   </div>
                 </motion.div>

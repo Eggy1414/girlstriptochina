@@ -87,23 +87,6 @@ export default function TripDashboard() {
         </div>
       </motion.div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: "Total Days", value: totalDays, icon: "📅" },
-          { label: "Cities", value: "4 + Transit", icon: "🏙️" },
-          { label: "Travellers", value: "4", icon: "👩‍👩‍👧‍👧" },
-          { label: "Duration", value: "Jun 22 – Jul 9", icon: "⏱️" },
-        ].map((stat, i) => (
-          <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * i }}>
-            <div className="text-center border border-border rounded-lg px-3 py-4">
-              <div className="text-lg mb-1">{stat.icon}</div>
-              <div className="font-display font-bold text-lg">{stat.value}</div>
-              <div className="text-xs text-foreground/50">{stat.label}</div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
 
       {/* Route Map */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>

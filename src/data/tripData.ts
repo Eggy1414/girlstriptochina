@@ -95,7 +95,7 @@ export const ACCOMMODATIONS: Accommodation[] = [
 ];
 
 export const INITIAL_DAYS: DayPlan[] = [
-  { date: "2025-06-22", label: "Day 1 — The Cyberpunk Skyline", city: "chongqing", activities: [
+  { date: "2025-06-22", label: "Day 1 — Sydney ✈️ Chongqing: The Cyberpunk Skyline", city: "chongqing", activities: [
     { id: "a1", time: "Afternoon", title: "Jiefangbei CBD & Kuixing Mansion", notes: "Explore the Times Square of Chongqing, walk 5 mins to Kuixing Mansion to witness the 1F vs 22F magic", type: "activity" },
     { id: "a1b", time: "Afternoon", title: "Hao You Lai Hot & Sour Rice Noodles (Bayi Lu)", notes: "Famous hot & sour rice noodles snack stop", type: "food" },
     { id: "a1c", time: "Late Afternoon", title: "Daijia Lane Cliffside Walk", notes: "Quieter, elevated path overlooking the Jialing River. Best spot for coffee with a view", type: "activity" },

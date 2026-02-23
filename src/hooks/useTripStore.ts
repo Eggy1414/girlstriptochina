@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { DayPlan, Expense, PackingItem, INITIAL_DAYS, INITIAL_PACKING } from "@/data/tripData";
+import { DayPlan, Expense, PackingItem, INITIAL_DAYS, INITIAL_PACKING, generateId } from "@/data/tripData";
+import { RouteDay, RouteActivity, INITIAL_ROUTE_DAYS } from "@/data/routeData";
 
 function loadFromStorage<T>(key: string, fallback: T): T {
   try {
@@ -19,11 +20,13 @@ export function useTripStore() {
   const [expenses, setExpenses] = useState<Expense[]>(() => loadFromStorage("trip-expenses", []));
   const [packing, setPacking] = useState<PackingItem[]>(() => loadFromStorage("trip-packing", INITIAL_PACKING));
   const [cityNotes, setCityNotes] = useState<Record<string, string>>(() => loadFromStorage("trip-city-notes", {}));
+  const [routeDays, setRouteDays] = useState<RouteDay[]>(() => loadFromStorage("trip-route", INITIAL_ROUTE_DAYS));
 
   useEffect(() => saveToStorage("trip-days", days), [days]);
   useEffect(() => saveToStorage("trip-expenses", expenses), [expenses]);
   useEffect(() => saveToStorage("trip-packing", packing), [packing]);
   useEffect(() => saveToStorage("trip-city-notes", cityNotes), [cityNotes]);
+  useEffect(() => saveToStorage("trip-route", routeDays), [routeDays]);
 
   const updateDay = useCallback((date: string, updater: (day: DayPlan) => DayPlan) => {
     setDays(prev => prev.map(d => d.date === date ? updater(d) : d));
@@ -64,10 +67,36 @@ export function useTripStore() {
     setCityNotes(prev => ({ ...prev, [city]: note }));
   }, []);
 
+  // Route day operations
+  const addRouteDay = useCallback((day: RouteDay) => {
+    setRouteDays(prev => [...prev, day]);
+  }, []);
+
+  const removeRouteDay = useCallback((id: string) => {
+    setRouteDays(prev => prev.filter(d => d.id !== id));
+  }, []);
+
+  const updateRouteDay = useCallback((id: string, updates: Partial<Omit<RouteDay, "id" | "activities">>) => {
+    setRouteDays(prev => prev.map(d => d.id === id ? { ...d, ...updates } : d));
+  }, []);
+
+  const addRouteActivity = useCallback((dayId: string, activity: RouteActivity) => {
+    setRouteDays(prev => prev.map(d =>
+      d.id === dayId ? { ...d, activities: [...d.activities, activity] } : d
+    ));
+  }, []);
+
+  const removeRouteActivity = useCallback((dayId: string, activityId: string) => {
+    setRouteDays(prev => prev.map(d =>
+      d.id === dayId ? { ...d, activities: d.activities.filter(a => a.id !== activityId) } : d
+    ));
+  }, []);
+
   return {
     days, setDays, updateDay,
     expenses, addExpense, removeExpense,
     packing, togglePacking, togglePackingPerson, addPackingItem, removePackingItem,
     cityNotes, updateCityNote,
+    routeDays, addRouteDay, removeRouteDay, updateRouteDay, addRouteActivity, removeRouteActivity,
   };
 }

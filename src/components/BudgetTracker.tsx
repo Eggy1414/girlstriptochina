@@ -48,11 +48,88 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
     setNote("");
   };
 
-  const totalSpent = expenses.reduce((s, e) => s + (e.currency === "CNY" ? e.amount : e.amount * 4.76), 0);
+  const totalSpent = expenses.reduce((s, e) => s + e.amount, 0);
+
+  // Per-person totals (what each person paid)
+  const perPersonPaid: Record<string, number> = {};
+  // Per-person owes (what each person's share is across all expenses)
+  const perPersonOwes: Record<string, number> = {};
+  PEOPLE.forEach(p => { perPersonPaid[p] = 0; perPersonOwes[p] = 0; });
+
+  expenses.forEach(e => {
+    if (e.paidBy) perPersonPaid[e.paidBy] += e.amount;
+    const split = e.splitCount || 1;
+    const share = e.amount / split;
+    // Assume first N people in PEOPLE list share
+    PEOPLE.slice(0, split).forEach(p => { perPersonOwes[p] += share; });
+  });
+
+  // By category
+  const byCategory: Record<string, number> = {};
+  expenses.forEach(e => { byCategory[e.category] = (byCategory[e.category] || 0) + e.amount; });
+
+  // By city
+  const byCity: Record<string, number> = {};
+  expenses.forEach(e => { byCity[e.city] = (byCity[e.city] || 0) + e.amount; });
 
   return (
     <div className="space-y-6">
       <h2 className="font-display font-bold text-2xl flex items-center gap-2">💰 Expense Tracker</h2>
+
+      {/* Total Expense Summary */}
+      <div className="border border-border rounded-lg p-4 space-y-4">
+        <div className="flex items-center justify-between">
+          <span className="font-display font-bold text-lg">Total Expenses</span>
+          <span className="font-display font-bold text-3xl">¥{totalSpent.toFixed(0)}</span>
+        </div>
+
+        {expenses.length > 0 && (
+          <>
+            {/* Per Person Summary */}
+            <div className="grid grid-cols-2 gap-2">
+              {PEOPLE.map(p => {
+                const paid = perPersonPaid[p];
+                const owes = perPersonOwes[p];
+                const balance = paid - owes;
+                return (
+                  <div key={p} className="bg-accent/15 rounded-lg p-3 space-y-1">
+                    <p className="text-sm font-bold text-foreground">{p}</p>
+                    <p className="text-xs text-foreground/60">Paid: ¥{paid.toFixed(0)}</p>
+                    <p className="text-xs text-foreground/60">Owes: ¥{owes.toFixed(0)}</p>
+                    <p className={`text-xs font-bold ${balance >= 0 ? "text-foreground/80" : "text-destructive"}`}>
+                      {balance >= 0 ? `+¥${balance.toFixed(0)} owed back` : `-¥${Math.abs(balance).toFixed(0)} to pay`}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* By Category */}
+            <div>
+              <p className="text-xs text-foreground/50 mb-2 font-bold uppercase tracking-wide">By Category</p>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(byCategory).sort((a, b) => b[1] - a[1]).map(([cat, total]) => (
+                  <div key={cat} className="bg-accent/10 rounded-full px-3 py-1 text-xs">
+                    {CATEGORY_EMOJI[cat]} {cat} <span className="font-bold">¥{total.toFixed(0)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* By City */}
+            <div>
+              <p className="text-xs text-foreground/50 mb-2 font-bold uppercase tracking-wide">By City</p>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(byCity).sort((a, b) => b[1] - a[1]).map(([c, total]) => (
+                  <div key={c} className="bg-accent/10 rounded-full px-3 py-1 text-xs">
+                    {CITY_CONFIG[c as CityKey]?.emoji} {CITY_CONFIG[c as CityKey]?.name || c} <span className="font-bold">¥{total.toFixed(0)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
 
       {/* Add Expense Form */}
       <div className="border border-border rounded-lg p-4 space-y-4">
@@ -167,14 +244,6 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
           Add Expense
         </Button>
       </div>
-
-      {/* Total */}
-      {expenses.length > 0 && (
-        <div className="border border-border rounded-lg p-4 flex items-center justify-between">
-          <span className="text-sm text-foreground/60">Total Spent</span>
-          <span className="font-display font-bold text-2xl">¥{totalSpent.toFixed(0)}</span>
-        </div>
-      )}
 
       {/* Expense Log */}
       {expenses.length > 0 && (

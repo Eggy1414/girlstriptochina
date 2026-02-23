@@ -9,7 +9,7 @@ import PackingList from "@/components/PackingList";
 
 const TABS = [
   { id: "overview", label: "Overview", emoji: "🌏" },
-  
+  { id: "route", label: "Route", emoji: "🗺️" },
   { id: "budget", label: "Expenses", emoji: "💰" },
   
 
@@ -51,7 +51,7 @@ const Index = () => {
       {/* Content */}
       <main className="max-w-4xl mx-auto px-4 py-6">
         {activeTab === "overview" && <TripDashboard />}
-        
+        {activeTab === "route" && <div />}
         {activeTab === "budget" && <BudgetTracker expenses={store.expenses} addExpense={store.addExpense} removeExpense={store.removeExpense} />}
         
 

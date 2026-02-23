@@ -3,7 +3,7 @@ import { useTripStore } from "@/hooks/useTripStore";
 import TripDashboard from "@/components/TripDashboard";
 import Timeline from "@/components/Timeline";
 import BudgetTracker from "@/components/BudgetTracker";
-import Attractions from "@/components/Attractions";
+
 import PhotoGuide from "@/components/PhotoGuide";
 import PackingList from "@/components/PackingList";
 
@@ -11,7 +11,7 @@ const TABS = [
   { id: "overview", label: "Overview", emoji: "🌏" },
   { id: "timeline", label: "Timeline", emoji: "📅" },
   { id: "budget", label: "Expenses", emoji: "💰" },
-  { id: "attractions", label: "Attractions", emoji: "🎯" },
+  
   { id: "photos", label: "Photos", emoji: "📸" },
   { id: "packing", label: "Packing", emoji: "🎒" },
 ] as const;
@@ -53,7 +53,7 @@ const Index = () => {
         {activeTab === "overview" && <TripDashboard />}
         {activeTab === "timeline" && <Timeline days={store.days} updateDay={store.updateDay} />}
         {activeTab === "budget" && <BudgetTracker expenses={store.expenses} addExpense={store.addExpense} removeExpense={store.removeExpense} />}
-        {activeTab === "attractions" && <Attractions days={store.days} updateDay={store.updateDay} />}
+        
         {activeTab === "photos" && <PhotoGuide />}
         {activeTab === "packing" && <PackingList packing={store.packing} togglePacking={store.togglePacking} addPackingItem={store.addPackingItem} removePackingItem={store.removePackingItem} cityNotes={store.cityNotes} updateCityNote={store.updateCityNote} />}
       </main>

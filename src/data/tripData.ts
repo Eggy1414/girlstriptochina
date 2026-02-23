@@ -23,7 +23,11 @@ export interface Expense {
   city: CityKey;
   note: string;
   date: string;
+  paidBy?: string;
+  splitCount?: number;
 }
+
+export const PEOPLE = ["Lilin", "Vet", "Cathy", "Claire"] as const;
 
 export interface Attraction {
   id: string;

@@ -142,7 +142,7 @@ const RouteItinerary = ({ routeDays, addRouteDay, removeRouteDay, addRouteActivi
     <div className="space-y-2">
       <h2 className="text-2xl font-bold text-foreground mb-4 font-serif">🗺️ Full Route Itinerary</h2>
       <Accordion type="multiple" className="space-y-2">
-        {routeDays.map((day) => (
+        {(routeDays || []).map((day) => (
           <AccordionItem
             key={day.id}
             value={day.id}

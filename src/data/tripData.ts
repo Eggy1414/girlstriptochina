@@ -95,49 +95,24 @@ export const ACCOMMODATIONS: Accommodation[] = [
 ];
 
 export const INITIAL_DAYS: DayPlan[] = [
-  { date: "2025-06-22", label: "Day 1 — Departure (Arrives in Chongqing)", city: "flight", activities: [
-    { id: "a1", time: "Evening", title: "Flight Sydney → Chongqing", notes: "Red eye flight — get some sleep!", type: "transport" },
-    { id: "a1b", time: "Afternoon", title: "Jiefangbei CBD & Kuixing Mansion", notes: "Explore the Times Square of Chongqing, walk 5 mins to Kuixing Mansion to witness the 1F vs 22F magic", type: "activity" },
-    { id: "a1c", time: "Afternoon", title: "Hao You Lai Hot & Sour Rice Noodles (Bayi Lu)", notes: "Famous hot & sour rice noodles snack stop", type: "food" },
-    { id: "a1d", time: "Late Afternoon", title: "Daijia Lane Cliffside Walk", notes: "Quieter, elevated path overlooking the Jialing River. Best spot for coffee with a view", type: "activity" },
-    { id: "a1e", time: "Evening", title: "Hongya Cave from Qiansimen Bridge", notes: "The Spirited Away building — view the lights from the bridge for best panoramic shot", type: "photo" },
-    { id: "a1f", time: "Evening", title: "Tian Bang Bang Hotpot", notes: "Local residential-style hotpot dinner", type: "food" },
+  { date: "2025-06-22", label: "Day 1 — The Cyberpunk Skyline", city: "chongqing", activities: [
+    { id: "a1", time: "Afternoon", title: "Jiefangbei CBD & Kuixing Mansion", notes: "Explore the Times Square of Chongqing, walk 5 mins to Kuixing Mansion to witness the 1F vs 22F magic", type: "activity" },
+    { id: "a1b", time: "Afternoon", title: "Hao You Lai Hot & Sour Rice Noodles (Bayi Lu)", notes: "Famous hot & sour rice noodles snack stop", type: "food" },
+    { id: "a1c", time: "Late Afternoon", title: "Daijia Lane Cliffside Walk", notes: "Quieter, elevated path overlooking the Jialing River. Best spot for coffee with a view", type: "activity" },
+    { id: "a1d", time: "Evening", title: "Hongya Cave from Qiansimen Bridge", notes: "The Spirited Away building — view the lights from the bridge for best panoramic shot", type: "photo" },
+    { id: "a1e", time: "Evening", title: "Tian Bang Bang Hotpot", notes: "Local residential-style hotpot dinner", type: "food" },
   ] },
-  { date: "2025-06-23", label: "Day 2 — The Cyberpunk Skyline", city: "chongqing", activities: [
-    { id: "a2", time: "Morning", title: "Arrive & check in", notes: "Rest after flight", type: "rest" },
-    { id: "a3", time: "Afternoon", title: "Jiefangbei CBD & Kuixing Mansion", notes: "Times Square of Chongqing, witness the 1F vs 22F magic", type: "activity" },
-    { id: "a4", time: "Afternoon", title: "Hao You Lai Suan La Fen (Bayi Lu)", notes: "Famous hot & sour rice noodles", type: "food" },
-    { id: "a5", time: "Late Afternoon", title: "Daijia Lane Cliffside Walk", notes: "Elevated path overlooking Jialing River, great coffee spot", type: "activity" },
-    { id: "a6", time: "Evening", title: "Hongya Cave from Qiansimen Bridge", notes: "Best panoramic shot of the Spirited Away building", type: "photo" },
-    { id: "a7", time: "Evening", title: "Tian Bang Bang Hotpot", notes: "Local residential-style hotpot", type: "food" },
+  { date: "2025-06-23", label: "Day 2 — River Romance & Giant Pandas", city: "chongqing", activities: [
+    { id: "a2", time: "Morning", title: "Chongqing Zoo Panda House", notes: "See Yu Ke & Yu Ai pandas, arrive before 9AM for feeding", type: "activity" },
+    { id: "a3", time: "Afternoon", title: "Testbed 2 Art Park & Liziba Monorail", notes: "I Belonged to You filming location + watch the train pass through a building", type: "activity" },
+    { id: "a4", time: "Sunset", title: "Longmenhao Old Street & Xiaohao Lane", notes: "Renovated south bank historical area, perfect sunset walk", type: "activity" },
+    { id: "a5", time: "Evening", title: "Yangtze River Cable Car", notes: "Take from South Bank (Shangxin Street) to skip queues", type: "activity" },
   ] },
-  { date: "2025-06-24", label: "Day 3 — River Romance & Giant Pandas", city: "chongqing", activities: [
-    { id: "a8", time: "Morning", title: "Chongqing Zoo Panda House", notes: "See Yu Ke & Yu Ai pandas, arrive before 9AM for feeding", type: "activity" },
-    { id: "a9", time: "Afternoon", title: "Testbed 2 Art Park", notes: "I Belonged to You filming location", type: "activity" },
-    { id: "a10", time: "Afternoon", title: "Liziba Monorail Station", notes: "Watch the train pass through a building!", type: "photo" },
-    { id: "a11", time: "Sunset", title: "Longmenhao Old Street & Xiaohao Lane", notes: "Renovated south bank historical area, perfect sunset walk", type: "activity" },
-    { id: "a12", time: "Evening", title: "Yangtze River Cable Car", notes: "Take from South Bank (Shangxin Street) to skip queues", type: "activity" },
+  { date: "2025-06-24", label: "Day 3 — Old World Charm & Modern Vibes", city: "chongqing", activities: [
+    { id: "a6", time: "Morning", title: "Shancheng Alley (Mountain City Lane)", notes: "Authentic stone paths, Old Chongqing vibes", type: "activity" },
+    { id: "a7", time: "Midday", title: "Ciqikou Ancient Town", notes: "Souvenirs & Chen Mahua fried dough twists", type: "shopping" },
+    { id: "a8", time: "Late Afternoon", title: "Guanyinqiao Pedestrian Street", notes: "The real modern Chongqing, people-watching & trendy dinner", type: "activity" },
   ] },
-  { date: "2025-06-25", label: "Day 4 — Old World Charm & Modern Vibes", city: "chongqing", activities: [
-    { id: "a13", time: "Morning", title: "Shancheng Alley (Mountain City Lane)", notes: "Authentic stone paths, Old Chongqing vibes", type: "activity" },
-    { id: "a14", time: "Midday", title: "Ciqikou Ancient Town", notes: "Souvenirs & Chen Mahua fried dough twists", type: "shopping" },
-    { id: "a15", time: "Late Afternoon", title: "Guanyinqiao Pedestrian Street", notes: "The real modern Chongqing, people-watching & trendy dinner", type: "activity" },
-    { id: "a16", time: "Evening", title: "Travel to Zhangjiajie", notes: "", type: "transport" },
-  ] },
-  { date: "2025-06-26", label: "Day 5 — Zhangjiajie", city: "zhangjiajie", activities: [{ id: "a17", time: "All Day", title: "Zhangjiajie National Forest Park", notes: "Avatar Mountains!", type: "activity" }] },
-  { date: "2025-06-27", label: "Day 6 — Zhangjiajie", city: "zhangjiajie", activities: [{ id: "a18", time: "Morning", title: "Tianmen Mountain", notes: "Glass skywalk!", type: "activity" }] },
-  { date: "2025-06-28", label: "Day 7 — Zhangjiajie", city: "zhangjiajie", activities: [{ id: "a19", time: "All Day", title: "Glass Bridge & Grand Canyon", notes: "", type: "activity" }] },
-  { date: "2025-06-29", label: "Day 8 — Transit", city: "transit", activities: [{ id: "a20", time: "All Day", title: "Train Zhangjiajie → Beijing", notes: "~10 hour journey", type: "transport" }] },
-  { date: "2025-06-30", label: "Day 9 — Beijing", city: "beijing", activities: [{ id: "a21", time: "Morning", title: "Arrive Beijing", notes: "", type: "transport" }, { id: "a22", time: "Afternoon", title: "Forbidden City", notes: "Book tickets in advance!", type: "activity" }] },
-  { date: "2025-07-01", label: "Day 10 — Beijing", city: "beijing", activities: [{ id: "a23", time: "All Day", title: "Great Wall (Mutianyu)", notes: "Arrive early for fewer crowds", type: "activity" }] },
-  { date: "2025-07-02", label: "Day 11 — Beijing → Shanghai", city: "beijing", activities: [{ id: "a24", time: "Morning", title: "Temple of Heaven", notes: "", type: "activity" }, { id: "a25", time: "Afternoon", title: "Train/Flight to Shanghai", notes: "", type: "transport" }] },
-  { date: "2025-07-03", label: "Day 12 — Shanghai", city: "shanghai", activities: [{ id: "a26", time: "Morning", title: "The Bund", notes: "Morning walk along the waterfront", type: "activity" }] },
-  { date: "2025-07-04", label: "Day 13 — Shanghai", city: "shanghai", activities: [{ id: "a27", time: "All Day", title: "Yu Garden & Nanjing Road", notes: "", type: "activity" }] },
-  { date: "2025-07-05", label: "Day 14 — Shanghai", city: "shanghai", activities: [{ id: "a28", time: "All Day", title: "Shanghai Disneyland", notes: "Book tickets early!", type: "activity" }] },
-  { date: "2025-07-06", label: "Day 15 — Shanghai", city: "shanghai", activities: [{ id: "a29", time: "Afternoon", title: "Tianzifang", notes: "Art & cafes", type: "activity" }] },
-  { date: "2025-07-07", label: "Day 16 — Shanghai", city: "shanghai", activities: [{ id: "a30", time: "All Day", title: "Free Day / Shopping", notes: "", type: "shopping" }] },
-  { date: "2025-07-08", label: "Day 17 — Shanghai", city: "shanghai", activities: [{ id: "a31", time: "All Day", title: "Last day — explore & pack", notes: "Ship souvenirs if needed", type: "activity" }] },
-  { date: "2025-07-09", label: "Day 18 — Return", city: "return", activities: [{ id: "a32", time: "Morning", title: "Flight Shanghai → Sydney", notes: "Check in luggage + shipping boxes", type: "transport" }] },
 ];
 
 export const ATTRACTIONS: Attraction[] = [

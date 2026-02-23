@@ -41,6 +41,17 @@ export function useTripStore() {
     setPacking(prev => prev.map(p => p.id === id ? { ...p, checked: !p.checked } : p));
   }, []);
 
+  const togglePackingPerson = useCallback((id: string, person: string) => {
+    setPacking(prev => prev.map(p => {
+      if (p.id !== id) return p;
+      const checkedBy = p.checkedBy || [];
+      const updated = checkedBy.includes(person)
+        ? checkedBy.filter(n => n !== person)
+        : [...checkedBy, person];
+      return { ...p, checkedBy: updated };
+    }));
+  }, []);
+
   const addPackingItem = useCallback((item: PackingItem) => {
     setPacking(prev => [...prev, item]);
   }, []);
@@ -56,7 +67,7 @@ export function useTripStore() {
   return {
     days, setDays, updateDay,
     expenses, addExpense, removeExpense,
-    packing, togglePacking, addPackingItem, removePackingItem,
+    packing, togglePacking, togglePackingPerson, addPackingItem, removePackingItem,
     cityNotes, updateCityNote,
   };
 }

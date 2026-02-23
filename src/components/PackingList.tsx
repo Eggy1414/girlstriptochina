@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { PackingItem, CATEGORY_EMOJI, CITY_CONFIG, CityKey, generateId } from "@/data/tripData";
+import { PackingItem, CATEGORY_EMOJI, CITY_CONFIG, CityKey, PEOPLE, generateId } from "@/data/tripData";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { Plus, Trash2 } from "lucide-react";
 interface Props {
   packing: PackingItem[];
   togglePacking: (id: string) => void;
+  togglePackingPerson: (id: string, person: string) => void;
   addPackingItem: (item: PackingItem) => void;
   removePackingItem: (id: string) => void;
   cityNotes: Record<string, string>;
@@ -19,7 +20,7 @@ interface Props {
 const PACK_CATEGORIES = ["documents", "clothing", "toiletries", "electronics", "beauty", "misc"] as const;
 const NOTE_CITIES: CityKey[] = ["chongqing", "zhangjiajie", "beijing", "shanghai"];
 
-export default function PackingList({ packing, togglePacking, addPackingItem, removePackingItem, cityNotes, updateCityNote }: Props) {
+export default function PackingList({ packing, togglePacking, togglePackingPerson, addPackingItem, removePackingItem, cityNotes, updateCityNote }: Props) {
   const [showAdd, setShowAdd] = useState(false);
   const [newItem, setNewItem] = useState("");
   const [newCat, setNewCat] = useState<PackingItem["category"]>("misc");
@@ -80,6 +81,25 @@ export default function PackingList({ packing, togglePacking, addPackingItem, re
                   <div key={item.id} className="flex items-center gap-2 group py-1">
                     <Checkbox checked={item.checked} onCheckedChange={() => togglePacking(item.id)} />
                     <span className={`text-sm flex-1 ${item.checked ? "line-through text-foreground/40" : ""}`}>{item.item}</span>
+                    <div className="flex gap-1">
+                      {PEOPLE.map(person => {
+                        const done = item.checkedBy?.includes(person);
+                        return (
+                          <button
+                            key={person}
+                            onClick={() => togglePackingPerson(item.id, person)}
+                            className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold transition-colors ${
+                              done
+                                ? "bg-primary text-primary-foreground"
+                                : "border border-border text-foreground/40 hover:bg-accent/30"
+                            }`}
+                            title={`${person}: ${done ? "Done" : "Not done"}`}
+                          >
+                            {person.slice(0, 2)}
+                          </button>
+                        );
+                      })}
+                    </div>
                     <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100" onClick={() => removePackingItem(item.id)}>
                       <Trash2 className="h-3 w-3" />
                     </Button>

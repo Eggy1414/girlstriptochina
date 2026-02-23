@@ -60,6 +60,7 @@ export interface PackingItem {
   item: string;
   category: "documents" | "clothing" | "toiletries" | "electronics" | "beauty" | "misc";
   checked: boolean;
+  checkedBy?: string[];
 }
 
 export interface Accommodation {

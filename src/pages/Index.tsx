@@ -55,7 +55,7 @@ const Index = () => {
         {activeTab === "budget" && <BudgetTracker expenses={store.expenses} addExpense={store.addExpense} removeExpense={store.removeExpense} />}
         
         
-        {activeTab === "packing" && <PackingList packing={store.packing} togglePacking={store.togglePacking} addPackingItem={store.addPackingItem} removePackingItem={store.removePackingItem} cityNotes={store.cityNotes} updateCityNote={store.updateCityNote} />}
+        {activeTab === "packing" && <PackingList packing={store.packing} togglePacking={store.togglePacking} togglePackingPerson={store.togglePackingPerson} addPackingItem={store.addPackingItem} removePackingItem={store.removePackingItem} cityNotes={store.cityNotes} updateCityNote={store.updateCityNote} />}
       </main>
     </div>
   );

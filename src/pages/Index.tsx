@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTripStore } from "@/hooks/useTripStore";
 import TripDashboard from "@/components/TripDashboard";
-import Timeline from "@/components/Timeline";
+
 import BudgetTracker from "@/components/BudgetTracker";
 
 
@@ -9,7 +9,7 @@ import PackingList from "@/components/PackingList";
 
 const TABS = [
   { id: "overview", label: "Overview", emoji: "🌏" },
-  { id: "timeline", label: "Timeline", emoji: "📅" },
+  
   { id: "budget", label: "Expenses", emoji: "💰" },
   
   
@@ -51,7 +51,7 @@ const Index = () => {
       {/* Content */}
       <main className="max-w-4xl mx-auto px-4 py-6">
         {activeTab === "overview" && <TripDashboard />}
-        {activeTab === "timeline" && <Timeline days={store.days} updateDay={store.updateDay} />}
+        
         {activeTab === "budget" && <BudgetTracker expenses={store.expenses} addExpense={store.addExpense} removeExpense={store.removeExpense} />}
         
         

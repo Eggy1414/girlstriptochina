@@ -20,19 +20,63 @@ interface Props {
 const CATEGORIES = ["flights", "hotels", "food", "transport", "shopping", "activities", "shipping", "other"] as const;
 const CITIES: CityKey[] = ["chongqing", "zhangjiajie", "beijing", "shanghai"];
 
+function calculateSettlements(expenses: Expense[]) {
+  // Net balance for each person (positive = owed money, negative = owes money)
+  const net: Record<string, number> = {};
+  PEOPLE.forEach(p => { net[p] = 0; });
+
+  expenses.forEach(e => {
+    const paidBy = e.paidBy || PEOPLE[0];
+    const splitAmong = e.splitAmong && e.splitAmong.length > 0
+      ? e.splitAmong
+      : PEOPLE.slice(0, e.splitCount || 1);
+    const share = e.amount / splitAmong.length;
+
+    net[paidBy] += e.amount; // they paid this much
+    splitAmong.forEach(p => {
+      net[p] -= share; // they owe this much
+    });
+  });
+
+  // Settle debts: people who owe pay people who are owed
+  const debtors = PEOPLE.filter(p => net[p] < -0.01).map(p => ({ name: p, amount: -net[p] }));
+  const creditors = PEOPLE.filter(p => net[p] > 0.01).map(p => ({ name: p, amount: net[p] }));
+
+  const settlements: { from: string; to: string; amount: number }[] = [];
+  let di = 0, ci = 0;
+  while (di < debtors.length && ci < creditors.length) {
+    const transfer = Math.min(debtors[di].amount, creditors[ci].amount);
+    if (transfer > 0.01) {
+      settlements.push({ from: debtors[di].name, to: creditors[ci].name, amount: transfer });
+    }
+    debtors[di].amount -= transfer;
+    creditors[ci].amount -= transfer;
+    if (debtors[di].amount < 0.01) di++;
+    if (creditors[ci].amount < 0.01) ci++;
+  }
+
+  return { net, settlements };
+}
+
 export default function BudgetTracker({ expenses, addExpense, removeExpense }: Props) {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const [category, setCategory] = useState<Expense["category"]>("food");
   const [city, setCity] = useState<CityKey>("chongqing");
   const [paidBy, setPaidBy] = useState<string>(PEOPLE[0]);
-  const [splitCount, setSplitCount] = useState(4);
+  const [splitAmong, setSplitAmong] = useState<string[]>([...PEOPLE]);
 
   const parsedAmount = parseFloat(amount) || 0;
-  const perPerson = parsedAmount > 0 ? parsedAmount / splitCount : 0;
+  const perPerson = parsedAmount > 0 && splitAmong.length > 0 ? parsedAmount / splitAmong.length : 0;
+
+  const toggleSplitPerson = (person: string) => {
+    setSplitAmong(prev =>
+      prev.includes(person) ? prev.filter(p => p !== person) : [...prev, person]
+    );
+  };
 
   const handleAdd = () => {
-    if (!parsedAmount) return;
+    if (!parsedAmount || splitAmong.length === 0) return;
     addExpense({
       id: generateId(),
       amount: parsedAmount,
@@ -42,7 +86,8 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
       note,
       date: new Date().toISOString().slice(0, 10),
       paidBy,
-      splitCount,
+      splitAmong,
+      splitCount: splitAmong.length,
     });
     setAmount("");
     setNote("");
@@ -50,18 +95,18 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
 
   const totalSpent = expenses.reduce((s, e) => s + e.amount, 0);
 
-  // Per-person totals (what each person paid)
+  // Per-person totals
   const perPersonPaid: Record<string, number> = {};
-  // Per-person owes (what each person's share is across all expenses)
   const perPersonOwes: Record<string, number> = {};
   PEOPLE.forEach(p => { perPersonPaid[p] = 0; perPersonOwes[p] = 0; });
 
   expenses.forEach(e => {
     if (e.paidBy) perPersonPaid[e.paidBy] += e.amount;
-    const split = e.splitCount || 1;
-    const share = e.amount / split;
-    // Assume first N people in PEOPLE list share
-    PEOPLE.slice(0, split).forEach(p => { perPersonOwes[p] += share; });
+    const splitPeople = e.splitAmong && e.splitAmong.length > 0
+      ? e.splitAmong
+      : PEOPLE.slice(0, e.splitCount || 1);
+    const share = e.amount / splitPeople.length;
+    splitPeople.forEach(p => { perPersonOwes[p] += share; });
   });
 
   // By category
@@ -71,6 +116,9 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
   // By city
   const byCity: Record<string, number> = {};
   expenses.forEach(e => { byCity[e.city] = (byCity[e.city] || 0) + e.amount; });
+
+  // Settlements
+  const { settlements } = calculateSettlements(expenses);
 
   return (
     <div className="space-y-6">
@@ -103,6 +151,23 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
                 );
               })}
             </div>
+
+            {/* Who Owes Who - Settlements */}
+            {settlements.length > 0 && (
+              <div>
+                <p className="text-xs text-foreground/50 mb-2 font-bold uppercase tracking-wide">Settlement Plan</p>
+                <div className="space-y-2">
+                  {settlements.map((s, i) => (
+                    <div key={i} className="flex items-center gap-2 bg-accent/10 rounded-lg px-3 py-2 text-sm">
+                      <span className="font-bold text-destructive">{s.from}</span>
+                      <span className="text-foreground/40">→</span>
+                      <span className="font-bold text-foreground">{s.to}</span>
+                      <span className="ml-auto font-display font-bold">¥{s.amount.toFixed(0)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* By Category */}
             <div>
@@ -180,8 +245,8 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
           ))}
         </div>
 
-        {/* Paid By & Split */}
-        <div className="flex items-center gap-3 flex-wrap">
+        {/* Paid By & Split Among */}
+        <div className="space-y-3">
           <div className="flex items-center gap-2">
             <span className="text-sm text-foreground/60">Paid by:</span>
             <DropdownMenu>
@@ -201,29 +266,27 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
             </DropdownMenu>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-foreground/60">Split:</span>
-            <div className="flex gap-1">
-              {[1, 2, 3, 4].map(n => (
-                <button
-                  key={n}
-                  onClick={() => setSplitCount(n)}
-                  className={`h-8 w-8 rounded-full border border-border text-sm font-bold transition-colors ${
-                    splitCount === n
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-accent/30"
-                  }`}
-                >
-                  {n}
-                </button>
-              ))}
-            </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-sm text-foreground/60">Split among:</span>
+            {PEOPLE.map(p => (
+              <button
+                key={p}
+                onClick={() => toggleSplitPerson(p)}
+                className={`text-xs px-3 py-1.5 rounded-full border border-border font-bold transition-colors ${
+                  splitAmong.includes(p)
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-accent/30 text-foreground/50"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Live Preview */}
         <AnimatePresence>
-          {parsedAmount > 0 && (
+          {parsedAmount > 0 && splitAmong.length > 0 && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
@@ -232,15 +295,15 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
             >
               <div className="font-display font-bold">
                 {paidBy} paid ¥{parsedAmount.toFixed(2)}.{" "}
-                {splitCount > 1
-                  ? `Each person owes ¥${perPerson.toFixed(2)}.`
-                  : "No split."}
+                {splitAmong.length > 1
+                  ? `Split among ${splitAmong.join(", ")} — ¥${perPerson.toFixed(2)} each.`
+                  : `${splitAmong[0]} pays full amount.`}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <Button onClick={handleAdd} className="w-full" disabled={!parsedAmount}>
+        <Button onClick={handleAdd} className="w-full" disabled={!parsedAmount || splitAmong.length === 0}>
           Add Expense
         </Button>
       </div>
@@ -250,35 +313,40 @@ export default function BudgetTracker({ expenses, addExpense, removeExpense }: P
         <div className="border border-border rounded-lg p-4">
           <h3 className="font-display font-bold text-sm mb-3">Expense Log</h3>
           <div className="space-y-2 max-h-80 overflow-y-auto">
-            {[...expenses].reverse().map(e => (
-              <div
-                key={e.id}
-                className="flex items-start gap-2 text-sm py-2 px-2 rounded-md group hover:bg-accent/10 transition-colors"
-              >
-                <span>{CATEGORY_EMOJI[e.category]}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="font-semibold truncate">{e.note || e.category}</div>
-                  <div className="text-xs text-foreground/50">
-                    {e.paidBy && <span>{e.paidBy} paid</span>}
-                    {e.splitCount && e.splitCount > 1 && (
-                      <span> · split {e.splitCount} ways · ¥{(e.amount / e.splitCount).toFixed(2)} each</span>
-                    )}
-                    {CITY_CONFIG[e.city] && (
-                      <span> · {CITY_CONFIG[e.city].emoji} {CITY_CONFIG[e.city].name}</span>
-                    )}
-                  </div>
-                </div>
-                <span className="font-bold whitespace-nowrap">¥{e.amount.toFixed(0)}</span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 opacity-0 group-hover:opacity-100 shrink-0"
-                  onClick={() => removeExpense(e.id)}
+            {[...expenses].reverse().map(e => {
+              const splitPeople = e.splitAmong && e.splitAmong.length > 0
+                ? e.splitAmong
+                : PEOPLE.slice(0, e.splitCount || 1);
+              return (
+                <div
+                  key={e.id}
+                  className="flex items-start gap-2 text-sm py-2 px-2 rounded-md group hover:bg-accent/10 transition-colors"
                 >
-                  <Trash2 className="h-3 w-3" />
-                </Button>
-              </div>
-            ))}
+                  <span>{CATEGORY_EMOJI[e.category]}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold truncate">{e.note || e.category}</div>
+                    <div className="text-xs text-foreground/50">
+                      {e.paidBy && <span>{e.paidBy} paid</span>}
+                      {splitPeople.length > 1 && (
+                        <span> · split: {splitPeople.join(", ")} · ¥{(e.amount / splitPeople.length).toFixed(2)} each</span>
+                      )}
+                      {CITY_CONFIG[e.city] && (
+                        <span> · {CITY_CONFIG[e.city].emoji} {CITY_CONFIG[e.city].name}</span>
+                      )}
+                    </div>
+                  </div>
+                  <span className="font-bold whitespace-nowrap">¥{e.amount.toFixed(0)}</span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 opacity-0 group-hover:opacity-100 shrink-0"
+                    onClick={() => removeExpense(e.id)}
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

@@ -25,6 +25,7 @@ export interface Expense {
   date: string;
   paidBy?: string;
   splitCount?: number;
+  splitAmong?: string[];
 }
 
 export const PEOPLE = ["Lilin", "Vet", "Cathy", "Claire"] as const;

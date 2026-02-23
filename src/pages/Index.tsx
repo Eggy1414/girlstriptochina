@@ -3,7 +3,7 @@ import { useTripStore } from "@/hooks/useTripStore";
 import TripDashboard from "@/components/TripDashboard";
 
 import BudgetTracker from "@/components/BudgetTracker";
-
+import Timeline from "@/components/Timeline";
 
 import PackingList from "@/components/PackingList";
 
@@ -11,8 +11,8 @@ const TABS = [
   { id: "overview", label: "Overview", emoji: "🌏" },
   
   { id: "budget", label: "Expenses", emoji: "💰" },
-  
-  
+  { id: "timeline", label: "Timeline", emoji: "📅" },
+
   { id: "packing", label: "Packing", emoji: "🎒" },
 ] as const;
 
@@ -53,8 +53,8 @@ const Index = () => {
         {activeTab === "overview" && <TripDashboard />}
         
         {activeTab === "budget" && <BudgetTracker expenses={store.expenses} addExpense={store.addExpense} removeExpense={store.removeExpense} />}
-        
-        
+        {activeTab === "timeline" && <Timeline days={store.days} updateDay={store.updateDay} />}
+
         {activeTab === "packing" && <PackingList packing={store.packing} togglePacking={store.togglePacking} togglePackingPerson={store.togglePackingPerson} addPackingItem={store.addPackingItem} removePackingItem={store.removePackingItem} cityNotes={store.cityNotes} updateCityNote={store.updateCityNote} />}
       </main>
     </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTripStore } from "@/hooks/useTripStore";
 import TripDashboard from "@/components/TripDashboard";
-
+import RouteItinerary from "@/components/RouteItinerary";
 import BudgetTracker from "@/components/BudgetTracker";
 
 
@@ -51,7 +51,7 @@ const Index = () => {
       {/* Content */}
       <main className="max-w-4xl mx-auto px-4 py-6">
         {activeTab === "overview" && <TripDashboard />}
-        {activeTab === "route" && <div />}
+        {activeTab === "route" && <RouteItinerary />}
         {activeTab === "budget" && <BudgetTracker expenses={store.expenses} addExpense={store.addExpense} removeExpense={store.removeExpense} />}
         
 

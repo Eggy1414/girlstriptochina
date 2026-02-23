@@ -82,7 +82,7 @@ export const CITY_CONFIG: Record<CityKey, { name: string; emoji: string; colorCl
   zhangjiajie: { name: "Zhangjiajie", emoji: "🏔️", colorClass: "text-city-zhangjiajie", bgClass: "bg-city-zhangjiajie", dates: "Jun 26-29" },
   transit: { name: "Train to Beijing", emoji: "🚄", colorClass: "text-city-transit", bgClass: "bg-city-transit", dates: "Jun 29-30" },
   beijing: { name: "Beijing", emoji: "🏯", colorClass: "text-city-beijing", bgClass: "bg-city-beijing", dates: "Jun 30 - Jul 2" },
-  flightToShanghai: { name: "Flight to Shanghai", emoji: "✈️", colorClass: "text-city-flight", bgClass: "bg-city-flight", dates: "Jul 2" },
+  flightToShanghai: { name: "Train to Shanghai", emoji: "🚄", colorClass: "text-city-transit", bgClass: "bg-city-transit", dates: "Jul 2" },
   shanghai: { name: "Shanghai", emoji: "🌃", colorClass: "text-city-shanghai", bgClass: "bg-city-shanghai", dates: "Jul 2-8" },
   return: { name: "Return to Sydney", emoji: "🏠", colorClass: "text-city-flight", bgClass: "bg-city-flight", dates: "Jul 8-9" },
 };

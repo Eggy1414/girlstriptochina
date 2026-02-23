@@ -95,7 +95,14 @@ export const ACCOMMODATIONS: Accommodation[] = [
 ];
 
 export const INITIAL_DAYS: DayPlan[] = [
-  { date: "2025-06-22", label: "Day 1 — Departure", city: "flight", activities: [{ id: "a1", time: "Evening", title: "Flight Sydney → Chongqing", notes: "Red eye flight — get some sleep!", type: "transport" }] },
+  { date: "2025-06-22", label: "Day 1 — Departure (Arrives in Chongqing)", city: "flight", activities: [
+    { id: "a1", time: "Evening", title: "Flight Sydney → Chongqing", notes: "Red eye flight — get some sleep!", type: "transport" },
+    { id: "a1b", time: "Afternoon", title: "Jiefangbei CBD & Kuixing Mansion", notes: "Explore the Times Square of Chongqing, walk 5 mins to Kuixing Mansion to witness the 1F vs 22F magic", type: "activity" },
+    { id: "a1c", time: "Afternoon", title: "Hao You Lai Hot & Sour Rice Noodles (Bayi Lu)", notes: "Famous hot & sour rice noodles snack stop", type: "food" },
+    { id: "a1d", time: "Late Afternoon", title: "Daijia Lane Cliffside Walk", notes: "Quieter, elevated path overlooking the Jialing River. Best spot for coffee with a view", type: "activity" },
+    { id: "a1e", time: "Evening", title: "Hongya Cave from Qiansimen Bridge", notes: "The Spirited Away building — view the lights from the bridge for best panoramic shot", type: "photo" },
+    { id: "a1f", time: "Evening", title: "Tian Bang Bang Hotpot", notes: "Local residential-style hotpot dinner", type: "food" },
+  ] },
   { date: "2025-06-23", label: "Day 2 — The Cyberpunk Skyline", city: "chongqing", activities: [
     { id: "a2", time: "Morning", title: "Arrive & check in", notes: "Rest after flight", type: "rest" },
     { id: "a3", time: "Afternoon", title: "Jiefangbei CBD & Kuixing Mansion", notes: "Times Square of Chongqing, witness the 1F vs 22F magic", type: "activity" },

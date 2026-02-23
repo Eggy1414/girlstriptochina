@@ -4,7 +4,7 @@ import TripDashboard from "@/components/TripDashboard";
 import Timeline from "@/components/Timeline";
 import BudgetTracker from "@/components/BudgetTracker";
 
-import PhotoGuide from "@/components/PhotoGuide";
+
 import PackingList from "@/components/PackingList";
 
 const TABS = [
@@ -12,7 +12,7 @@ const TABS = [
   { id: "timeline", label: "Timeline", emoji: "📅" },
   { id: "budget", label: "Expenses", emoji: "💰" },
   
-  { id: "photos", label: "Photos", emoji: "📸" },
+  
   { id: "packing", label: "Packing", emoji: "🎒" },
 ] as const;
 
@@ -54,7 +54,7 @@ const Index = () => {
         {activeTab === "timeline" && <Timeline days={store.days} updateDay={store.updateDay} />}
         {activeTab === "budget" && <BudgetTracker expenses={store.expenses} addExpense={store.addExpense} removeExpense={store.removeExpense} />}
         
-        {activeTab === "photos" && <PhotoGuide />}
+        
         {activeTab === "packing" && <PackingList packing={store.packing} togglePacking={store.togglePacking} addPackingItem={store.addPackingItem} removePackingItem={store.removePackingItem} cityNotes={store.cityNotes} updateCityNote={store.updateCityNote} />}
       </main>
     </div>

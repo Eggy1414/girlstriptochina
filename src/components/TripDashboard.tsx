@@ -164,7 +164,7 @@ export default function TripDashboard() {
                         <div className="text-[10px] text-foreground/50">{acc.nights} nights = ¥{acc.pricePerNight * acc.nights}</div>
                       </>
                     ) : (
-                      <div className="font-display font-bold text-sm text-foreground/40">待定</div>
+                      <div className="font-display font-bold text-sm text-foreground/40">TBD</div>
                     )}
                   </div>
                 </motion.div>

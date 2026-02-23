@@ -87,10 +87,10 @@ export const CITY_CONFIG: Record<CityKey, { name: string; emoji: string; colorCl
 };
 
 export const ACCOMMODATIONS: Accommodation[] = [
-  { city: "chongqing", name: "待定", type: "hotel", address: "解放碑附近", dates: "Jun 23-26", nights: 3, pricePerNight: 0, currency: "CNY", notes: "民宿 ¥550-1100/晚，酒店 ¥1000-1500两间房。暑假价格偏高，4-5月预订" },
-  { city: "zhangjiajie", name: "待定", type: "hotel", address: "武陵源区，公园入口附近", dates: "Jun 26-29", nights: 3, pricePerNight: 0, currency: "CNY", notes: "还没选好，需要比较价格" },
-  { city: "beijing", name: "待定", type: "homestay", address: "东城区", dates: "Jun 30 - Jul 2", nights: 3, pricePerNight: 0, currency: "CNY", notes: "还没选好，需要比较价格" },
-  { city: "shanghai", name: "待定", type: "homestay", address: "静安区", dates: "Jul 2-8", nights: 6, pricePerNight: 0, currency: "CNY", notes: "还没选好，需要比较价格" },
+  { city: "chongqing", name: "TBD", type: "hotel", address: "Near Jiefangbei", dates: "Jun 23-26", nights: 3, pricePerNight: 0, currency: "CNY", notes: "Homestay ¥550-1100/night, Hotel ¥1000-1500 for 2 rooms. Higher prices in summer, book in Apr/May" },
+  { city: "zhangjiajie", name: "TBD", type: "hotel", address: "Wulingyuan, near park entrance", dates: "Jun 26-29", nights: 3, pricePerNight: 0, currency: "CNY", notes: "Not yet decided, need to compare prices" },
+  { city: "beijing", name: "TBD", type: "homestay", address: "Dongcheng District", dates: "Jun 30 - Jul 2", nights: 3, pricePerNight: 0, currency: "CNY", notes: "Not yet decided, need to compare prices" },
+  { city: "shanghai", name: "TBD", type: "homestay", address: "Jing'an District", dates: "Jul 2-8", nights: 6, pricePerNight: 0, currency: "CNY", notes: "Not yet decided, need to compare prices" },
 ];
 
 export const INITIAL_DAYS: DayPlan[] = [

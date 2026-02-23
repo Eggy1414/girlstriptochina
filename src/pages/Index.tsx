@@ -51,7 +51,7 @@ const Index = () => {
       {/* Content */}
       <main className="max-w-4xl mx-auto px-4 py-6">
         {activeTab === "overview" && <TripDashboard />}
-        {activeTab === "route" && <RouteItinerary />}
+        {activeTab === "route" && <RouteItinerary routeDays={store.routeDays} addRouteDay={store.addRouteDay} removeRouteDay={store.removeRouteDay} addRouteActivity={store.addRouteActivity} removeRouteActivity={store.removeRouteActivity} />}
         {activeTab === "budget" && <BudgetTracker expenses={store.expenses} addExpense={store.addExpense} removeExpense={store.removeExpense} />}
         
 

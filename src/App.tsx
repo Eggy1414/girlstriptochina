@@ -14,7 +14,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       {/* UPDATE HERE: Replace YOUR_REPO_NAME with your exact GitHub repository name */}
-      <BrowserRouter basename="/YOUR_REPO_NAME">
+      <BrowserRouter basename="/girlstriptochina">
         <Routes>
           <Route path="/" element={<Index />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

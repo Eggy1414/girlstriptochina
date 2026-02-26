@@ -13,7 +13,8 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      {/* UPDATE HERE: Replace YOUR_REPO_NAME with your exact GitHub repository name */}
+      <BrowserRouter basename="/YOUR_REPO_NAME">
         <Routes>
           <Route path="/" element={<Index />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
